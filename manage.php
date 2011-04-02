@@ -71,6 +71,7 @@ if (isset($_POST['del_thread']))
         case "iichan"     : $s1="iichan.ru"; break;
         case "uchan"      : $s1="uchan.org.ua"; break;
         case "longtirech" : $s1="2--ch.ru"; break;
+        case "pirach"     : $s1="2ch.so";break;
        };
       $del_thr="http\:\/\/".$s1."\/".$df[1]."\/res\/".$df[2];
       $com = "cat ".$file_links." | sed -e 's/".$del_thr."//' > tmp && rm ".$file_links." && mv tmp ".$file_links;

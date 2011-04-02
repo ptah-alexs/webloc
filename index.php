@@ -28,6 +28,7 @@ foreach ($links as $link)
     case "iichan.ru"    : $s1 = "iichan";break;
     case "ucan.org.ua"  : $s1 = "uchan";break;
     case "2--ch.ru"     : $s1 = "longtirech";break;
+    case "2ch.so"       : $s1 = "pirach";break;
    };
   $a0[]=$s1."_".$s0[1]."_".$s0[3];
  };
