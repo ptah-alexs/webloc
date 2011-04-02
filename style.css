@@ -1,0 +1,29 @@
+a {
+color: blue;
+}
+
+a:link {
+color: blue;
+}
+
+a:visited {
+color: blue;
+}
+
+a:hover {
+color: #FF6600;
+font-style: italic;
+}
+
+a.died {
+color: red;
+}
+body {
+margin: 50px 40px 10px 70px;
+background-color:#EEEEEE
+}
+
+p.stat {
+color: blue;
+text-align: center;
+}
