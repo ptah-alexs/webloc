@@ -25,30 +25,30 @@ $links = file($file_links,FILE_IGNORE_NEW_LINES);
 // Добавление треда.
 $am = "Введите Url";
 if (isset($_POST['add_thread']))
-{
- if ($_POST['thread'] != "")
-  {                                                                                                                             
-   if (file_exists($file_lock))
-    {
-     $am = "Файл ссылок занят другим процессом, попробуйте позже.";
-    }
-   else
-    {
-     if (! in_array($_POST['thread'],$links))
-      {
-       $fd0 = fopen($file_links,"a+");
-       fwrite($fd0,"\n".$_POST['thread']);
-       fclose($fd0);
-       $am = "<p class=\"stat\">Тред отправлен в обработку<p>";
-       $_POST['thread']="";
-      }
-     else
-      {
-       $am= "<p class=\"stat\">Тред уже добавлен<p>";
-      };
-    };
-  };
-};
+ {
+  if ($_POST['thread'] != "")
+   {                                                                                                                             
+    if (file_exists($file_lock))
+     {
+      $am = "Файл ссылок занят другим процессом, попробуйте позже.";
+     }
+    else
+     {
+      if (! in_array($_POST['thread'],$links))
+       {
+        $fd0 = fopen($file_links,"a+");
+        fwrite($fd0,"\n".$_POST['thread']);
+        fclose($fd0);
+        $am = "<p class=\"stat\">Тред отправлен в обработку<p>";
+        $_POST['thread']="";
+       }
+      else
+       {
+        $am= "<p class=\"stat\">Тред уже добавлен<p>";
+       };
+     };
+   };
+ };
 echo $am;
 ///////////////////////////////////////////////
 //Удаление треда.
@@ -82,27 +82,24 @@ if (isset($_POST['del_thread']))
 ///////////////////////////////////////////////
 // Изменение алиасов.
 if (isset($_POST['apply_alias']))
-{
- $fg=$_POST['aliaslist'];
- $asd=array_keys($_POST['aliaslist']);
- foreach ($asd as $sk)
-  {
-  if ($fg[$sk] != "")
+ {
+  $fg=$_POST['aliaslist'];
+  $asd=array_keys($_POST['aliaslist']);
+  $fd1=fopen($file_alias,"w+");
+  foreach ($asd as $sk)
    {
-   if ($fg[$sk] != $list_of_alias[$sk])
-    {
-    $list_of_alias[$sk] = $fg[$sk]."\n";
-    };
+    if (($fg[$sk] !== "") && ($fg[$sk] !== $list_of_alias[$sk]))
+     {
+      $list_of_alias[$sk] = $fg[$sk]."\n";
+     };
+    if (!empty($list_of_alias[$sk]))
+     {
+      fwrite($fd1,$sk." ".$list_of_alias[$sk]);
+     };
    };
-  };
- $fd1=fopen($file_alias,"w+");
- foreach ($asd as $sk)
-  {
-   fwrite($fd1,$sk." ".$list_of_alias[$sk]);
-  };
- fclose($fd1);
-$_POST['aliaslist']="";
-};
+  fclose($fd1);
+  $_POST['aliaslist']="";
+ };
 ///////////////////////////////////////////////
 ?>
 <form action="manage.php" method="post">
