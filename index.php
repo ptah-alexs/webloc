@@ -30,19 +30,19 @@ foreach ($links as $link)
     case "2--ch.ru"     : $s1 = "longtirech";break;
     case "2ch.so"       : $s1 = "pirach";break;
    };
-  $a0[]=$s1."_".$s0[1]."_".$s0[3];
+  $list_of_links[]=$s1."_".$s0[1]."_".$s0[3];
  };
 
 $files=scandir('threads');
 $ind=0;
 foreach ($files as $f)
  {
-  $li_type="";
-  $a_class="";
-  $died="";
   if (strpos($f,".html") != "")
    {
-    if (! in_array($f,$a0))
+    $li_type="";
+    $a_class="";
+    $died="";
+    if (! in_array($f,$list_of_links))
      {
       $li_type=" type=\"circle\"";
       $a_class=" class=\"died\"";
@@ -50,12 +50,13 @@ foreach ($files as $f)
      };
     if ($list_of_alias[$f] != "")
      {
-      echo "<li".$li_type."><a href=\"threads/".$f."\"".$a_class.">".$list_of_alias[$f].$died."</a></li><br>";
+      $name = $list_of_alias[$f];
      }
     else
      {
-      echo "<li".$li_type."><a href=\"threads/".$f."\"".$a_class.">".$f.$died."</a></li><br>";
+      $name = $f;
      };
+    echo "<li".$li_type."><a href=\"threads/".$f."\"".$a_class.">".$name.$died."</a></li><br>";
     $ind=$ind+1;;
    };
  };
