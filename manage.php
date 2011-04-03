@@ -58,24 +58,36 @@ if (isset($_POST['del_thread']))
    {
     $asd=array_keys($_POST['threadlist']);
     $_POST['threadlist']="";
-    foreach ($asd as $sk)
+    if (! file_exists($file_lock))
      {
-      $cc="python grab.py del threads/".$sk;
-      exec($cc,$output);
-      echo $output[0]."  ".$sk."  ";
-      $df = explode("_",$sk);
-      switch ($df[0]) 
+      foreach ($asd as $sk)
        {
-        case "tirech"     : $s1="2-ch.ru"; break;
-        case "0chan"      : $s1="www.0chan.ru"; break;
-        case "iichan"     : $s1="iichan.ru"; break;
-        case "uchan"      : $s1="uchan.org.ua"; break;
-        case "longtirech" : $s1="2--ch.ru"; break;
-        case "pirach"     : $s1="2ch.so";break;
+        $cc="python grab.py del threads/".$sk;
+        exec($cc,$output);
+        echo ("<br>".$output[0]."  ".$sk."  ");
+        $df = explode("_",$sk);
+        switch ($df[0]) 
+         {
+          case "tirech"     : $s1="2-ch.ru"; break;
+          case "0chan"      : $s1="www.0chan.ru"; break;
+          case "iichan"     : $s1="iichan.ru"; break;
+          case "uchan"      : $s1="uchan.org.ua"; break;
+          case "longtirech" : $s1="2--ch.ru"; break;
+          case "pirach"     : $s1="2ch.so";break;
+         };
+        $del_thr[] = "http://".$s1."/".$df[1]."/res/".$df[2];
        };
-      $del_thr="http\:\/\/".$s1."\/".$df[1]."\/res\/".$df[2];
-      $com = "cat ".$file_links." | sed -e 's/".$del_thr."//' > tmp && rm ".$file_links." && mv tmp ".$file_links;
-      exec($com,$out);
+      $dt = array_diff($links,$del_thr);
+      $fd = fopen($file_links,"w+");
+      foreach ($dt as $tt)
+       {
+        fwrite($fd,$tt."\n");
+       };
+      fclose($fd);
+     }
+    else
+     {
+      echo("<br> Файл ссылок занят другим процессом, попробуйте позже.");
      };
    };
  };
