@@ -111,46 +111,38 @@ if (isset($_POST['apply_alias']))
 <?
 $files=scandir('threads');
 /////////////////////////////////////////////////
-//Вывод списка тредов для изменения алиасов.
-if (isset($_POST['alias_thread']))
-{
- foreach ($files as $as) 
-  {
-   if (strpos($as,".html")!="")
-    {
-     if ($list_of_alias[$as] != "")
-      {
-       echo $list_of_alias[$as]." <input type=text size=35 name=\"aliaslist[".$as."]\"><br>";
-      }
-     else
-      {
-       echo $as." <input type=text size=35 name=\"aliaslist[".$as."]\"><br>";
-      };
-    };
-  };
+//Вывод списка тредов для изменения алиасов и списка для удаления.
+foreach ($files as $as) 
+ {
+  if (strpos($as,".html")!="")
+   {
+    if (! empty($list_of_alias[$as]))
+     {
+      $name = $list_of_alias[$as];
+     }
+    else
+     {
+      $name = $as;
+     };
+    if (isset($_POST['alias_thread']))
+     {
+      echo $name." <input type=text size=35 name=\"aliaslist[".$as."]\"><br>";
+     }
+    else
+     {
+      echo "<input type=checkbox name=threadlist[".$as."] value=\"1\">".$name."<br>";
+     };
+   };
+ };
+if (isset($_POST['alias_thread'])) 
+ {
   echo "<input type=\"submit\" name=\"apply_alias\" value=\"Применить\">";
-}
-/////////////////////////////////////////////////
-//Вывод списка тредов для удаления. 
+ }
 else
-{
- foreach ($files as $as) 
-  {
-   if (strpos($as,".html")!="")
-    {
-     if ($list_of_alias[$as] != "")
-      {
-       echo "<input type=checkbox name=threadlist[".$as."] value=\"1\">".$list_of_alias[$as]."<br>";
-      }
-     else
-      {
-       echo "<input type=checkbox name=threadlist[".$as."] value=\"1\">".$as."<br>";
-      };
-    };
-  };
- echo "<input type=\"submit\" name=\"del_thread\" value=\"Удалить\">
- <input type=\"submit\" name=\"alias_thread\" value=\"Управление именами\">";
-};
+ {
+  echo "<input type=\"submit\" name=\"del_thread\" value=\"Удалить\">
+  <input type=\"submit\" name=\"alias_thread\" value=\"Управление именами\">";
+ };
 /////////////////////////////////////////////////
 ?>
 </form>
