@@ -27,7 +27,7 @@ $am = "Введите Url";
 if (isset($_POST['add_thread']))
  {
   if ($_POST['thread'] != "")
-   {                                                                                                                             
+   {
     if (file_exists($file_lock))
      {
       $am = "Файл ссылок занят другим процессом, попробуйте позже.";
@@ -66,6 +66,7 @@ if (isset($_POST['del_thread']))
         exec($cc,$output);
         echo ("<br>".$output[0]."  ".$sk."  ");
         $df = explode("_",$sk);
+        $df_len = sizeof($df);
         switch ($df[0]) 
          {
           case "tirech"     : $s1="2-ch.ru"; break;
@@ -75,7 +76,14 @@ if (isset($_POST['del_thread']))
           case "longtirech" : $s1="2--ch.ru"; break;
           case "pirach"     : $s1="2ch.so";break;
          };
-        $del_thr[] = "http://".$s1."/".$df[1]."/res/".$df[2];
+        if ($df_len == 3)
+         {
+          $del_thr[] = "http://".$s1."/".$df[1]."/res/".$df[2];
+         }
+        else
+         {
+          $del_thr[] = "http://".$s1."/_".$df[2]."/res/".$df[3];
+         };
        };
       $dt = array_diff($links,$del_thr);
       $fd = fopen($file_links,"w+");
