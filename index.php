@@ -7,16 +7,8 @@
 <body>
 <ul type="disk">
 <?
-$file_links="links.txt";
-$file_alias="alias";
-
-$aliases = file($file_alias);
-foreach ($aliases as $alias)
- {
-   $alias_tmp = explode(" ",$alias, 2);
-   $list_of_alias[$alias_tmp[0]] = $alias_tmp[1];
- };
-
+require 'webloc.inc';
+$list_of_alias=loalias($file_alias);
 $links = file($file_links,FILE_IGNORE_NEW_LINES);
 foreach ($links as $link)
  {
@@ -33,32 +25,29 @@ foreach ($links as $link)
   $list_of_links[]=$s1."_".$s0[1]."_".$s0[3];
  };
 
-$files=scandir('threads');
+$files=lfdir('threads','html');
 $ind=0;
 foreach ($files as $f)
  {
-  if (strpos($f,".html") != "")
+  $li_type="";
+  $a_class="";
+  $died="";
+  if (! in_array($f,$list_of_links))
    {
-    $li_type="";
-    $a_class="";
-    $died="";
-    if (! in_array($f,$list_of_links))
-     {
-      $li_type=" type=\"circle\"";
-      $a_class=" class=\"died\"";
-      $died=" (тред умер)";
-     };
-    if ($list_of_alias[$f] != "")
-     {
-      $name = $list_of_alias[$f];
-     }
-    else
-     {
-      $name = $f;
-     };
-    echo "<li".$li_type."><a href=\"threads/".$f."\"".$a_class.">".$name.$died."</a></li><br>";
-    $ind=$ind+1;;
+    $li_type=" type=\"circle\"";
+    $a_class=" class=\"died\"";
+    $died=" (тред умер)";
    };
+  if ($list_of_alias[$f] != "")
+   {
+    $name = $list_of_alias[$f];
+   }
+  else
+   {
+    $name = $f;
+   };
+  echo "<li".$li_type."><a href=\"threads/".$f."\"".$a_class.">".$name.$died."</a></li><br>";
+  $ind=$ind+1;;
  };
 ?>
 </ul>

@@ -6,20 +6,8 @@
 </head>
 <body>
 <?php
-///////////////////////////////////////////////
-//Файловые переменные
-$file_lock="lock.pid";
-$file_links="links.txt";
-$file_alias="alias";
-///////////////////////////////////////////////
-//Получение списка алиасов.
-$aliases = file($file_alias);
-foreach ($aliases as $alias)
- {
-  $alias_tmp = explode(" ",$alias, 2);
-  $list_of_alias[$alias_tmp[0]] = $alias_tmp[1];
- };
-///////////////////////////////////////////////
+require 'webloc.inc';
+$list_of_alias=loalias($file_alias);
 $links = file($file_links,FILE_IGNORE_NEW_LINES);
 ///////////////////////////////////////////////
 // Добавление треда.
@@ -129,29 +117,26 @@ if (isset($_POST['apply_alias']))
 <hr>
 <form action="manage.php" method="post">
 <?
-$files=scandir('threads');
+$files=lfdir('threads','html');
 /////////////////////////////////////////////////
 //Вывод списка тредов для изменения алиасов и списка для удаления.
 foreach ($files as $as) 
  {
-  if (strpos($as,".html")!="")
+  if (! empty($list_of_alias[$as]))
    {
-    if (! empty($list_of_alias[$as]))
-     {
-      $name = $list_of_alias[$as];
-     }
-    else
-     {
-      $name = $as;
-     };
-    if (isset($_POST['alias_thread']))
-     {
-      echo $name." <input type=text size=35 name=\"aliaslist[".$as."]\"><br>";
-     }
-    else
-     {
-      echo "<input type=checkbox name=threadlist[".$as."] value=\"1\">".$name."<br>";
-     };
+    $name = $list_of_alias[$as];
+   }
+  else
+   {
+    $name = $as;
+   };
+  if (isset($_POST['alias_thread']))
+   {
+    echo $name." <input type=text size=35 name=\"aliaslist[".$as."]\"><br>";
+   }
+  else
+   {
+    echo "<input type=checkbox name=threadlist[".$as."] value=\"1\">".$name."<br>";
    };
  };
 if (isset($_POST['alias_thread'])) 
