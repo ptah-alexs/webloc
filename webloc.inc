@@ -15,12 +15,12 @@ function lfdir($dirname,$filter)
    foreach ($files as $as) 
     {
      if (strpos($as,".".$filter)!="")
-     {
-      $res[]=$as;
-     };
+      {
+       $res[]=$as;
+      };
     };
   }
- else $res="";
+ else $res[]="";
  return $res;
 };
 

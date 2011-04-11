@@ -88,6 +88,21 @@ if (isset($_POST['del_thread']))
    };
  };
 ///////////////////////////////////////////////
+// Архивация тредов.
+if (isset($_POST['archive_thread']))
+ {
+  if (! empty($_POST['threadlist']))
+   {
+    $asd=array_keys($_POST['threadlist']);
+    $_POST['threadlist']="";
+    foreach ($asd as $sk)
+     {
+      $cc="python grab.py e threads/".$sk;
+      exec($cc,$output);
+     };
+   };
+ };
+///////////////////////////////////////////////
 // Изменение алиасов.
 if (isset($_POST['apply_alias']))
  {
@@ -146,11 +161,20 @@ if (isset($_POST['alias_thread']))
 else
  {
   echo "<input type=\"submit\" name=\"del_thread\" value=\"Удалить\">
-  <input type=\"submit\" name=\"alias_thread\" value=\"Управление именами\">";
+  <input type=\"submit\" name=\"alias_thread\" value=\"Управление именами\">
+  <input type=\"submit\" name=\"archive_thread\" value=\"Архивировать\">";
  };
 /////////////////////////////////////////////////
 ?>
 </form>
+<hr>
+<?
+$arch_files=lfdir('arch','tar.gz');
+foreach ($arch_files as $as)
+ {
+  echo("<a href=\"arch/".$as." \">".$as."</a><br>");
+ };
+?>
 <hr>
 <a href="./">Вернуться к списку тредов.</a>
 </body>
