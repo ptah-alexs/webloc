@@ -124,6 +124,18 @@ if (isset($_POST['apply_alias']))
   $_POST['aliaslist']="";
  };
 ///////////////////////////////////////////////
+if (isset($_POST['del_arch']))
+ {
+  if (! empty($_POST['archlist']))
+   {
+    $asd=array_keys($_POST['archlist']);
+    foreach ($asd as $sk)
+     {
+      exec("rm arch/".$sk,$output);
+     };
+   };
+ };
+///////////////////////////////////////////////
 ?>
 <form action="manage.php" method="post">
 <input type="text" size=35 name="thread"><br>
@@ -167,12 +179,19 @@ else
 /////////////////////////////////////////////////
 ?>
 </form>
-<hr>
 <?
 $arch_files=lfdir('arch','tar.gz');
-foreach ($arch_files as $as)
+if ( $arch_files[0] != "")
  {
-  echo("<a href=\"arch/".$as." \">".$as."</a><br>");
+echo("<hr>
+      Доступные архивы:
+      <form action=\"manage.php\" method=\"post\">");
+  foreach ($arch_files as $as) 
+   {
+    echo("<input type=checkbox name=archlist[".$as."] value=1><a href=\"arch/".$as." \">".$as."</a><br>");
+   };
+echo("<input type=\"submit\" name=\"del_arch\" value=\"Удалить Архив\">
+     </form>");
  };
 ?>
 <hr>
