@@ -4,7 +4,7 @@
 $file_lock="lock.pid";
 $file_links="links.txt";
 $file_alias="alias";
-
+$extract_cl="tar  --strip-components=1 --exclude=*/templates -xvf ";
 ///////////////////////////////////////////////
 //Получение списка файлов в каталоге по маске.
 function lfdir($dirname,$filter)

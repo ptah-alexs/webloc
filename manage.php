@@ -9,6 +9,17 @@
 require 'webloc.inc';
 $list_of_alias=loalias($file_alias);
 $links = file($file_links,FILE_IGNORE_NEW_LINES);
+
+
+$uploaddir = 'arch/';
+if ($_FILES['userfile']['type'] == "application/x-gzip")
+ {
+  if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir . $_FILES['userfile']['name'])) 
+   {
+    exec($extract_cl."arch/".$_FILES['userfile']['name'],$output);
+   };
+ };
+
 ///////////////////////////////////////////////
 // Добавление треда.
 $am = "Введите Url";
@@ -124,6 +135,7 @@ if (isset($_POST['apply_alias']))
   $_POST['aliaslist']="";
  };
 ///////////////////////////////////////////////
+//Удаление архива
 if (isset($_POST['del_arch']))
  {
   if (! empty($_POST['archlist']))
@@ -132,6 +144,20 @@ if (isset($_POST['del_arch']))
     foreach ($asd as $sk)
      {
       exec("rm arch/".$sk,$output);
+     };
+   };
+ };
+///////////////////////////////////////////////
+//Развертывание архива
+if (isset($_POST['extract_arch']))
+ {
+  if (! empty($_POST['archlist']))
+   {
+    $asd=array_keys($_POST['archlist']);
+    foreach ($asd as $sk)
+     {
+      exec($extract_cl."arch/".$sk,$output);
+      print_r($output);
      };
    };
  };
@@ -191,9 +217,16 @@ echo("<hr>
     echo("<input type=checkbox name=archlist[".$as."] value=1><a href=\"arch/".$as." \">".$as."</a><br>");
    };
 echo("<input type=\"submit\" name=\"del_arch\" value=\"Удалить Архив\">
+      <input type=\"submit\" name=\"extract_arch\" value=\"Развернуть Архив\">
      </form>");
  };
 ?>
+<hr>
+<form enctype="multipart/form-data" action="manage.php" method="post">
+Загрузить архив: <input name="userfile" type="file">
+<input type="submit" value="Загрузить">
+</form>
+
 <hr>
 <a href="./">Вернуться к списку тредов.</a>
 </body>
