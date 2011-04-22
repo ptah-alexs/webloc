@@ -9,27 +9,35 @@
 require 'webloc.inc';
 $list_of_alias=loalias($file_alias);
 $links = file($file_links,FILE_IGNORE_NEW_LINES);
-
-
+///////////////////////////////////////////////
+// Обработка загруженного файла.
 $uploaddir = 'arch/';
+
 if ($_FILES['userfile']['type'] == "application/x-gzip")
  {
   if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir . $_FILES['userfile']['name'])) 
    {
     exec($extract_cl."arch/".$_FILES['userfile']['name'],$output);
+    $mm="Файл успешно загружен.";
+   }
+  else
+   {
+    $mm="При загрузке файла произошла ошибка.";
    };
+ }
+else
+ {
+  $mm="Файл не является архивом tar.gz.";
  };
-
 ///////////////////////////////////////////////
 // Добавление треда.
-$am = "Введите Url";
 if (isset($_POST['add_thread']))
  {
   if ($_POST['thread'] != "")
    {
     if (file_exists($file_lock))
      {
-      $am = "Файл ссылок занят другим процессом, попробуйте позже.";
+      $mm = "Файл ссылок занят другим процессом, попробуйте позже.";
      }
     else
      {
@@ -38,21 +46,21 @@ if (isset($_POST['add_thread']))
         $fd0 = fopen($file_links,"a+");
         fwrite($fd0,"\n".$_POST['thread']);
         fclose($fd0);
-        $am = "<p class=\"stat\">Тред отправлен в обработку<p>";
+        $mm="Тред отправлен в обработку.";
         $_POST['thread']="";
        }
       else
        {
-        $am= "<p class=\"stat\">Тред уже добавлен<p>";
+        $mm="Тред уже добавлен ранее.";
        };
      };
    };
  };
-echo $am;
 ///////////////////////////////////////////////
 //Удаление треда.
 if (isset($_POST['del_thread']))
  {
+  $mm="";
   if (! empty($_POST['threadlist']))
    {
     $asd=array_keys($_POST['threadlist']);
@@ -63,7 +71,7 @@ if (isset($_POST['del_thread']))
        {
         $cc="python grab.py del threads/".$sk;
         exec($cc,$output);
-        echo ("<br>".$output[0]."  ".$sk."  ");
+        $mm=$mm."<br>".$output[0]."  ".$sk.".  ";
         $df = explode("_",$sk);
         $df_len = sizeof($df);
         switch ($df[0]) 
@@ -94,7 +102,7 @@ if (isset($_POST['del_thread']))
      }
     else
      {
-      echo("<br> Файл ссылок занят другим процессом, попробуйте позже.");
+      $mm="Файл ссылок занят другим процессом, попробуйте позже.";
      };
    };
  };
@@ -162,7 +170,10 @@ if (isset($_POST['extract_arch']))
    };
  };
 ///////////////////////////////////////////////
+//Вывод собщений
+echo("<p class=\"stat\">".$mm."</p>");
 ?>
+<p>Введите Url треда:</p>
 <form action="manage.php" method="post">
 <input type="text" size=35 name="thread"><br>
 <input type="submit" name="add_thread" value="Добавить">
